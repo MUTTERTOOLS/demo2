@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Paper.js SVG Boolean Operations</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.12.1/paper-core.min.js"></script>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="800" height="600"></canvas>
+    <script>
+        // 初始化 paper.js
+        paper.setup(document.getElementById('canvas'));
+
+        // 创建并返回一个圆形
+        function createCircle(centerX, centerY, radius, color) {
+            return new paper.Path.Circle({
+                center: [centerX, centerY],
+                radius: radius,
+                strokeColor: 'black',
+                fillColor: color
+            });
+        }
+
+        // 创建并返回一个矩形
+        function createRectangle(x, y, width, height, color) {
+            return new paper.Path.Rectangle({
+                point: [x, y],
+                size: [width, height],
+                strokeColor: 'black',
+                fillColor: color
+            });
+        }
+
+        // 执行布尔运算并显示结果
+        function performBooleanOperation(shape1, shape2, operation) {
+            let result;
+
+            if (operation === 'union') {
+                result = shape1.unite(shape2);
+            } else if (operation === 'intersection') {
+                result = shape1.intersect(shape2);
+            } else if (operation === 'difference') {
+                result = shape1.subtract(shape2);
+            }
+
+            result.strokeColor = 'black';
+            result.fillColor = 'green';
+
+            // 移除原始图形
+            shape1.remove();
+            shape2.remove();
+
+            // 添加结果图形到场景
+            result.addTo(paper.project.activeLayer);
+        }
+
+        // 创建两个图形
+        const circle = createCircle(60, 200, 100, 'red');
+        const rectangle = createRectangle(150, 150, 150, 150, 'blue');
+
+        // 执行布尔运算
+        performBooleanOperation(circle, rectangle, 'union');
+        // performBooleanOperation(circle, rectangle, 'intersection');
+        // performBooleanOperation(circle, rectangle, 'difference');
+
+        // 更新视图
+        paper.view.draw();
+    </script>
+</body>
+</html>
